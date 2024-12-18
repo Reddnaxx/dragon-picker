@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Game.Scripts.Dragon.Structs;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -8,13 +9,19 @@ namespace Game.Scripts.Dragon
 {
     public class EnemyDragon : MonoBehaviour
     {
+        [SerializeField] private List<GameObject> modelsList = new();
+
         [SerializeField] private DragonPreferences preferences;
         [SerializeField] private DragonEggDropPreferences eggDropPreferences;
 
+        private int _dragonModel;
         private bool _isAlive = true;
 
         private void Start()
         {
+            _dragonModel = PlayerPrefs.GetInt("SelectedDragon", 0);
+            Instantiate(modelsList[_dragonModel], transform);
+            
             StartCoroutine(DropEgg());
         }
 

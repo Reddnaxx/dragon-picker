@@ -9,18 +9,26 @@ namespace Game.Scripts.Shield
         private InputHandler _inputHandler;
 
         private Camera _camera;
-        
         private TMP_Text _scoreText;
+        private TMP_Text _bestScoreText;
+        
+        private AudioSource _audioSource;
+
+        private int _bestScore;
         
         private void Start()
         {
             _inputHandler = InputHandler.Instance;
             _camera = Camera.main;
+            _audioSource = GetComponent<AudioSource>();
             
             _inputHandler.OnMouseMove += Move;
             
             _scoreText = GameObject.Find("Score").GetComponent<TMP_Text>();
             _scoreText.text = "Score: 0";
+            _bestScore = PlayerPrefs.GetInt("BestScore", 0);
+            _bestScoreText = GameObject.Find("BestScore").GetComponent<TMP_Text>();
+            _bestScoreText.text = $"Best Score: {_bestScore}";
         }
 
         private void OnDestroy()
@@ -44,7 +52,15 @@ namespace Game.Scripts.Shield
                 
                 var score = int.Parse(_scoreText.text.Split(' ').Last());
                 score += 1;
+
+                if (score > _bestScore)
+                {
+                    _bestScore = score;
+                    PlayerPrefs.SetInt("BestScore", _bestScore);
+                }
+                
                 _scoreText.text = $"Score: {score}";
+                _audioSource.Play();
             }
         }
     }

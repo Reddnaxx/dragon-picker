@@ -11,15 +11,18 @@ namespace Game.Scripts.Dragon
         [SerializeField] private ParticleSystem hitParticles;
 
         private GameEntryPoint _entryPoint;
+        private AudioSource _audioSource;
 
         private void Awake()
         {
             _entryPoint = FindFirstObjectByType<GameEntryPoint>();
+            _audioSource = GetComponent<AudioSource>();
         }
 
         private void OnTriggerEnter(Collider other)
         {
             dragonEggModel.SetActive(false);
+            _audioSource.Play();
             hitParticles.Play();
         }
 
